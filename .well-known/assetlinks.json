@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sandal.sudoku",
+      "sha256_cert_fingerprints": [
+        "79:23:99:F3:20:FD:DD:19:C5:AE:95:01:9F:4D:A4:A9:69:C9:09:9F:C7:85:E7:E8:D0:7D:53:A1:01:0E:9F:75",
+        "94:F3:83:D3:A6:14:70:BE:6C:67:39:83:1B:DC:45:C2:F1:06:A9:33:23:FC:BA:34:15:C9:E8:A5:01:C2:F7:28"
+      ]
+    }
+  }
+]

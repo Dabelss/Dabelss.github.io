@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Pocket Sudoku puzzle</title>
+<style>
+  :root { color-scheme: light dark; --bg: #fbfaf8; --ink: #1c1a17; --muted: #8a8377; --accent: #2f6f4f; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #17140f; --ink: #ece7df; --muted: #a39b8e; --accent: #7fc8a0; } }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1.25rem;
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--ink); box-sizing: border-box;
+  }
+  main { max-width: 24rem; text-align: center; }
+  h1 { font-size: 1.5rem; margin: 0 0 .5rem; letter-spacing: -.01em; }
+  p { color: var(--muted); margin: 0 0 1.5rem; }
+  a.button {
+    display: inline-block; padding: .75rem 1.5rem; border-radius: 999px;
+    background: var(--accent); color: var(--bg); text-decoration: none; font-weight: 600;
+  }
+  a.button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>A Sudoku for you</h1>
+  <p>Someone sent you this puzzle. Pocket Sudoku opens it straight away, and after installing it the puzzle is waiting.</p>
+  <a class="button" id="play" href="https://play.google.com/store/apps/details?id=com.sandal.sudoku">Get Pocket Sudoku</a>
+</main>
+<script>
+(function () {
+  // The app claims this link itself once installed; this page only runs when it did not.
+  var match = /[?&]puzzle=([^&#]*)/.exec(location.search);
+  var puzzle = match ? decodeURIComponent(match[1]) : "";
+  // Play hands the referrer to the app after install, which is how the puzzle survives it.
+  var referrer = "utm_source=app&utm_medium=puzzle" + (puzzle ? "&puzzle=" + puzzle : "");
+  var play = "https://play.google.com/store/apps/details?id=com.sandal.sudoku&referrer=" +
+    encodeURIComponent(referrer);
+  document.getElementById("play").href = play;
+  if (puzzle && /Android/i.test(navigator.userAgent)) {
+    // Chrome opens the installed app through its own scheme, or falls back to Play without it.
+    location.replace("intent://puzzle?puzzle=" + encodeURIComponent(puzzle) +
+      "#Intent;scheme=pocketsudoku;package=com.sandal.sudoku;S.browser_fallback_url=" +
+      encodeURIComponent(play) + ";end");
+  } else {
+    location.replace(play);
+  }
+})();
+</script>
+</body>
+</html>
