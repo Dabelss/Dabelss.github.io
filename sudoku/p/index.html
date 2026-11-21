@@ -34,14 +34,17 @@
   // The app claims this link itself once installed; this page only runs when it did not.
   var match = /[?&]puzzle=([^&#]*)/.exec(location.search);
   var puzzle = match ? decodeURIComponent(match[1]) : "";
+  // A challenge also carries the sender's time in seconds; digits only, anything else is dropped.
+  var timeMatch = /[?&]t=(\d{1,5})(?:[&#]|$)/.exec(location.search);
+  var time = timeMatch ? "&t=" + timeMatch[1] : "";
   // Play hands the referrer to the app after install, which is how the puzzle survives it.
-  var referrer = "utm_source=app&utm_medium=puzzle" + (puzzle ? "&puzzle=" + puzzle : "");
+  var referrer = "utm_source=app&utm_medium=puzzle" + (puzzle ? "&puzzle=" + puzzle + time : "");
   var play = "https://play.google.com/store/apps/details?id=com.sandal.sudoku&referrer=" +
     encodeURIComponent(referrer);
   document.getElementById("play").href = play;
   if (puzzle && /Android/i.test(navigator.userAgent)) {
     // Chrome opens the installed app through its own scheme, or falls back to Play without it.
-    location.replace("intent://puzzle?puzzle=" + encodeURIComponent(puzzle) +
+    location.replace("intent://puzzle?puzzle=" + encodeURIComponent(puzzle) + time +
       "#Intent;scheme=pocketsudoku;package=com.sandal.sudoku;S.browser_fallback_url=" +
       encodeURIComponent(play) + ";end");
   } else {
